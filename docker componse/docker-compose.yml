@@ -1,0 +1,33 @@
+version: '3'
+services:
+  keycloak:
+    image: jboss/keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=my_database
+
+  php:
+    image: php:latest
+    volumes:
+      - ./seu_codigo_php:/var/www/html
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+
+  vue:
+    image: node:latest
+    volumes:
+      - ./seu_codigo_vue:/app
+    ports:
+      - "8081:8080"
